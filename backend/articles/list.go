@@ -21,11 +21,11 @@ func ListArticleRoute(c *gin.Context) {
 	}
 	defer conn.Close(ctx)
 
-	queries := database_interfaces.New(conn)
+	operations := database_interfaces.New(conn)
 
-	articles, err := queries.ListArticles(ctx)
+	articles, err := operations.ListArticles(ctx)
 	if err != nil {
-		log.Fatalf("Error while listing articles: %s", err)
+		log.Printf("Error while listing articles: %s", err)
 
 		status := http.StatusInternalServerError
 		response := HelloResponse{
@@ -35,6 +35,9 @@ func ListArticleRoute(c *gin.Context) {
 		c.JSON(status, response)
 	}
 
+	if len(articles) == 0 {
+		articles = make([]database_interfaces.Article, 0)
+	}
 	status := http.StatusOK
-	c.JSON(status, articles)
+	c.JSON(status, gin.H{"articles": articles})
 }
