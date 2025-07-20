@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func DeleteArticle(c *gin.Context) {
+func DeleteArticleRoute(c *gin.Context) {
 	status := http.StatusNoContent
 
 	response := HelloResponse{

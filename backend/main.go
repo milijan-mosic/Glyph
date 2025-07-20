@@ -19,11 +19,11 @@ func main() {
 		articles.InitializeDatabase()
 		article := router.Group(urlPrefix + "/article")
 
-		article.GET("/list", articles.ListArticle)
-		article.GET("/get", articles.GetArticle)
-		article.POST("/create", articles.CreateArticle)
-		article.PUT("/update", articles.UpdateArticle)
-		article.DELETE("/delete", articles.DeleteArticle)
+		article.GET("/list", articles.ListArticleRoute)
+		article.GET("/get", articles.GetArticleRoute)
+		article.POST("/create", articles.CreateArticleRoute)
+		article.PUT("/update", articles.UpdateArticleRoute)
+		article.DELETE("/delete", articles.DeleteArticleRoute)
 	}
 
 	log.Printf("Server starting on: http://localhost%s\n", address)

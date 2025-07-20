@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetArticle(c *gin.Context) {
+func GetArticleRoute(c *gin.Context) {
 	status := http.StatusOK
 
 	response := HelloResponse{

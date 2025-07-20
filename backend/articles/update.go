@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateArticle(c *gin.Context) {
+func UpdateArticleRoute(c *gin.Context) {
 	status := http.StatusOK
 
 	response := HelloResponse{
