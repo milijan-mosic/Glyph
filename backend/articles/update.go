@@ -1,13 +1,12 @@
 package articles
 
 import (
-	"encoding/json"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func UpdateArticle(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
+func UpdateArticle(c *gin.Context) {
 	status := http.StatusOK
 
 	response := HelloResponse{
@@ -15,13 +14,5 @@ func UpdateArticle(w http.ResponseWriter, r *http.Request) {
 		Status:  status,
 	}
 
-	jsonResponse, err := json.Marshal(response)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"error": "Failed to encode JSON"}`))
-		return
-	}
-
-	w.WriteHeader(status)
-	w.Write(jsonResponse)
+	c.JSON(status, response)
 }
