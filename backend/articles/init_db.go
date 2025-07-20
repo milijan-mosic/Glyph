@@ -2,7 +2,6 @@ package articles
 
 import (
 	"context"
-	"fmt"
 	"heartbit/utils"
 	"log"
 
@@ -28,15 +27,10 @@ var schema = `
 func InitializeDatabase() {
 	ctx := context.Background()
 
-	username := utils.GetEnvVariable("POSTGRES_USER")
-	password := utils.GetEnvVariable("POSTGRES_PASSWORD")
-	dbName := utils.GetEnvVariable("POSTGRES_DB")
-
-	url := fmt.Sprintf("postgres://%s:%s@database:5432/%s", username, password, dbName)
-
+	url := utils.GetDatabaseUrl()
 	conn, err := pgx.Connect(ctx, url)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Couldn't connect to database: %s", err)
 	}
 	defer conn.Close(ctx)
 

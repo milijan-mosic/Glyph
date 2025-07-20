@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -19,4 +20,14 @@ func GetEnvVariable(key string) string {
 	}
 
 	return value
+}
+
+func GetDatabaseUrl() string {
+	username := GetEnvVariable("POSTGRES_USER")
+	password := GetEnvVariable("POSTGRES_PASSWORD")
+	dbName := GetEnvVariable("POSTGRES_DB")
+
+	url := fmt.Sprintf("postgres://%s:%s@database:5432/%s", username, password, dbName)
+
+	return url
 }
