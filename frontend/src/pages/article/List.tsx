@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { type Article } from "@/types";
 import { ArticleCard } from "@components/Article";
 
-function Homepage() {
+export const ListArticles = () => {
   const fetchArticles = async () => {
     const url: string = "/api/1.0/article/";
 
@@ -35,6 +35,4 @@ function Homepage() {
       </div>
     </div>
   );
-}
-
-export default Homepage;
+};
