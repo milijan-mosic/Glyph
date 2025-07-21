@@ -9,12 +9,12 @@ import (
 )
 
 type Article struct {
-	ID          string
-	Title       string
-	Description pgtype.Text
-	Content     string
-	Author      string
-	Published   bool
-	CreatedAt   pgtype.Timestamp
-	ModifiedAt  pgtype.Timestamp
+	ID          string           `json:"id"`
+	Title       string           `json:"title"`
+	Description pgtype.Text      `json:"description"`
+	Content     string           `json:"content"`
+	Author      string           `json:"author"`
+	Published   bool             `json:"published"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	ModifiedAt  pgtype.Timestamp `json:"modified_at"`
 }

@@ -21,11 +21,11 @@ RETURNING id, title, description, content, author, published, created_at, modifi
 `
 
 type CreateArticleParams struct {
-	ID        string
-	Title     string
-	Content   string
-	Author    string
-	Published bool
+	ID        string `json:"id"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	Author    string `json:"author"`
+	Published bool   `json:"published"`
 }
 
 func (q *Queries) CreateArticle(ctx context.Context, arg CreateArticleParams) (Article, error) {
@@ -124,8 +124,8 @@ RETURNING id, title, description, content, author, published, created_at, modifi
 `
 
 type UpdateArticleParams struct {
-	ModifiedAt pgtype.Timestamp
-	ID         string
+	ModifiedAt pgtype.Timestamp `json:"modified_at"`
+	ID         string           `json:"id"`
 }
 
 func (q *Queries) UpdateArticle(ctx context.Context, arg UpdateArticleParams) error {
