@@ -13,28 +13,34 @@ import (
 
 const createArticle = `-- name: CreateArticle :one
 INSERT INTO articles (
-  id, title, content, author, published
+  id, title, description, content, author, published, created_at, modified_at
 ) VALUES (
-  $1, $2, $3, $4, $5
+  $1, $2, $3, $4, $5, $6, $7, $8
 )
 RETURNING id, title, description, content, author, published, created_at, modified_at
 `
 
 type CreateArticleParams struct {
-	ID        string `json:"id"`
-	Title     string `json:"title"`
-	Content   string `json:"content"`
-	Author    string `json:"author"`
-	Published bool   `json:"published"`
+	ID          string           `json:"id"`
+	Title       string           `json:"title"`
+	Description string           `json:"description"`
+	Content     string           `json:"content"`
+	Author      string           `json:"author"`
+	Published   bool             `json:"published"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	ModifiedAt  pgtype.Timestamp `json:"modified_at"`
 }
 
 func (q *Queries) CreateArticle(ctx context.Context, arg CreateArticleParams) (Article, error) {
 	row := q.db.QueryRow(ctx, createArticle,
 		arg.ID,
 		arg.Title,
+		arg.Description,
 		arg.Content,
 		arg.Author,
 		arg.Published,
+		arg.CreatedAt,
+		arg.ModifiedAt,
 	)
 	var i Article
 	err := row.Scan(
@@ -118,17 +124,28 @@ func (q *Queries) ListArticles(ctx context.Context) ([]Article, error) {
 
 const updateArticle = `-- name: UpdateArticle :exec
 UPDATE articles
-SET modified_at = $1
-WHERE id = $2
+SET title = $1, description = $2, content = $3, published = $4, modified_at = $5
+WHERE id = $6
 RETURNING id, title, description, content, author, published, created_at, modified_at
 `
 
 type UpdateArticleParams struct {
-	ModifiedAt pgtype.Timestamp `json:"modified_at"`
-	ID         string           `json:"id"`
+	Title       string           `json:"title"`
+	Description string           `json:"description"`
+	Content     string           `json:"content"`
+	Published   bool             `json:"published"`
+	ModifiedAt  pgtype.Timestamp `json:"modified_at"`
+	ID          string           `json:"id"`
 }
 
 func (q *Queries) UpdateArticle(ctx context.Context, arg UpdateArticleParams) error {
-	_, err := q.db.Exec(ctx, updateArticle, arg.ModifiedAt, arg.ID)
+	_, err := q.db.Exec(ctx, updateArticle,
+		arg.Title,
+		arg.Description,
+		arg.Content,
+		arg.Published,
+		arg.ModifiedAt,
+		arg.ID,
+	)
 	return err
 }

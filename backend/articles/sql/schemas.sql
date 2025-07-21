@@ -2,7 +2,7 @@ CREATE TABLE articles (
   id   TEXT PRIMARY KEY,
   --
   title TEXT NOT NULL,
-  description  TEXT,
+  description TEXT NOT NULL,
   content TEXT NOT NULL,
   --
   author TEXT NOT NULL,

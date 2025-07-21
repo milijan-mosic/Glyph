@@ -6,13 +6,28 @@ import (
 	"heartbit/utils"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type CreateArticleArguments struct {
+	Title       string `json:"title" binding:"required"`
+	Description string `json:"description"`
+	Published   bool   `json:"published"`
+	Content     string `json:"content" binding:"required"`
+}
+
 func CreateArticleRoute(c *gin.Context) {
+	var arguments CreateArticleArguments
+	if err := c.ShouldBindJSON(&arguments); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	ctx := context.Background()
 
 	url := utils.GetDatabaseUrl()
@@ -24,12 +39,21 @@ func CreateArticleRoute(c *gin.Context) {
 
 	operations := database_interfaces.New(conn)
 
+	var timestamp pgtype.Timestamp
+	timestamp.Time = time.Now()
+	timestamp.Valid = true
+
+	articleId := uuid.NewString()
+
 	article, err := operations.CreateArticle(ctx, database_interfaces.CreateArticleParams{
-		ID:        uuid.NewString(),
-		Title:     "Test title :)",
-		Author:    "Milijan Mosic",
-		Content:   "# Hello!\n",
-		Published: true,
+		ID:          articleId,
+		Title:       arguments.Title,
+		Author:      "Milijan Mosic",
+		Description: arguments.Description,
+		Content:     arguments.Content,
+		Published:   arguments.Published,
+		ModifiedAt:  timestamp,
+		CreatedAt:   timestamp,
 	})
 	if err != nil {
 		log.Printf("Error while creating article: %s", err)
@@ -45,9 +69,5 @@ func CreateArticleRoute(c *gin.Context) {
 	log.Printf("Created new article %v", article)
 
 	status := http.StatusCreated
-	response := HelloResponse{
-		Message: "Article created!",
-		Status:  status,
-	}
-	c.JSON(status, response)
+	c.JSON(status, gin.H{"ArticleId": articleId})
 }

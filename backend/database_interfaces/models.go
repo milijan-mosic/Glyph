@@ -11,7 +11,7 @@ import (
 type Article struct {
 	ID          string           `json:"id"`
 	Title       string           `json:"title"`
-	Description pgtype.Text      `json:"description"`
+	Description string           `json:"description"`
 	Content     string           `json:"content"`
 	Author      string           `json:"author"`
 	Published   bool             `json:"published"`

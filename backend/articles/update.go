@@ -14,7 +14,11 @@ import (
 )
 
 type UpdateArticleArguments struct {
-	ArticleId string `json:"article_id" binding:"required"`
+	ArticleId   string `json:"article_id" binding:"required"`
+	Title       string `json:"title" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Published   bool   `json:"published" binding:"required"`
+	Content     string `json:"content" binding:"required"`
 }
 
 func UpdateArticleRoute(c *gin.Context) {
@@ -40,8 +44,12 @@ func UpdateArticleRoute(c *gin.Context) {
 	timestamp.Valid = true
 
 	err = operations.UpdateArticle(ctx, database_interfaces.UpdateArticleParams{
-		ID:         arguments.ArticleId,
-		ModifiedAt: timestamp,
+		Title:       arguments.Title,
+		Description: arguments.Description,
+		Content:     arguments.Content,
+		Published:   arguments.Published,
+		ModifiedAt:  timestamp,
+		ID:          arguments.ArticleId,
 	})
 	if err != nil {
 		log.Printf("Error while updating article: %s", err)

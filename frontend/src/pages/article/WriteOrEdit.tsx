@@ -29,7 +29,7 @@ export const WriteOrEditArticle = () => {
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [published, setPublished] = useState<string>("");
+  const [published, setPublished] = useState<boolean>(false);
   const [content, setContent] = useState<string>("");
 
   const { articleId } = useParams<string>();
@@ -69,18 +69,18 @@ export const WriteOrEditArticle = () => {
         content: editorRef.current?.getMarkdown(),
         author: "MM",
       })
-      .then(() => {
-        navigate("/article/" + articleId);
+      .then((response) => {
+        navigate("/article/" + response?.data?.ArticleId);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Axios error:", error.message);
       });
   };
 
   const updateArticle = async () => {
     await axios
       .put(url + "update", {
-        id: articleId,
+        article_id: articleId,
         title: title,
         description: description,
         published: published,
@@ -90,7 +90,7 @@ export const WriteOrEditArticle = () => {
         navigate("/article/" + articleId);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Axios error:", error.message);
       });
   };
 
@@ -102,7 +102,7 @@ export const WriteOrEditArticle = () => {
         document.getElementById("delete_article_modal").showModal();
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Axios error:", error.message);
       });
   };
 
@@ -137,8 +137,7 @@ export const WriteOrEditArticle = () => {
               type="checkbox"
               checked={published}
               onChange={(e) => {
-                console.log(e.target.value);
-                setPublished(e);
+                setPublished(e.target.checked ? true : false);
               }}
               className="toggle border-red-600 bg-red-500 checked:border-green-500 checked:bg-green-400 checked:text-green-800"
             />
