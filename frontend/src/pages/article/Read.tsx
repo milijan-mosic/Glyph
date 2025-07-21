@@ -8,12 +8,11 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 export const ReadArticle = () => {
+  const url: string = "/api/1.0/article/";
   const { articleId } = useParams<string>();
   const [article, setArticle] = useState<Article>({});
 
   const fetchArticle = async () => {
-    const url: string = "/api/1.0/article/";
-
     const article: Article = await axios
       .get(url + "get/" + articleId)
       .then((response) => {

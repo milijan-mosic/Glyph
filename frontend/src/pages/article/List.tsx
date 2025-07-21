@@ -4,11 +4,10 @@ import { type Article } from "@/types";
 import { ArticleCard } from "@components/Article";
 
 export const ListArticles = () => {
+  const url: string = "/api/1.0/article/";
   const [articles, setArticles] = useState<Array<Article>>([]);
 
   const fetchArticles = async () => {
-    const url: string = "/api/1.0/article/";
-
     const articles: Array<Article> = await axios
       .get(url + "list")
       .then((response) => {
