@@ -4,6 +4,8 @@ import { type Article } from "@/types";
 import { useParams } from "react-router";
 import defaultArticleImage from "@assets/default_article.jpg";
 import { Link } from "react-router";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export const ReadArticle = () => {
   const { articleId } = useParams<string>();
@@ -52,7 +54,9 @@ export const ReadArticle = () => {
 
         <h2 className="text-3xl">{article.title}</h2>
 
-        <div className="mt-8">{article.content}</div>
+        <div className="mt-8">
+          <Markdown remarkPlugins={[remarkGfm]}>{article.content}</Markdown>
+        </div>
       </div>
     </div>
   );
