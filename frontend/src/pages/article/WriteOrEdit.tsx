@@ -1,60 +1,228 @@
 import axios from "axios";
+import {
+  MDXEditor,
+  headingsPlugin,
+  listsPlugin,
+  quotePlugin,
+  thematicBreakPlugin,
+  UndoRedo,
+  BoldItalicUnderlineToggles,
+  toolbarPlugin,
+  linkDialogPlugin,
+  imagePlugin,
+  tablePlugin,
+  BlockTypeSelect,
+  CreateLink,
+  InsertImage,
+  ListsToggle,
+  type MDXEditorMethods,
+} from "@mdxeditor/editor";
+import { type Article } from "@/types";
 
-function Homepage() {
+import "@mdxeditor/editor/style.css";
+import { useEffect, useRef, useState } from "react";
+import { useParams, useNavigate } from "react-router";
+
+export const WriteOrEditArticle = () => {
   const url: string = "/api/1.0/article/";
+  const editorRef = useRef<MDXEditorMethods>(null);
 
-  const getArticle = () => {
-    axios
-      .get(url + "get")
-      .then(function (response) {
-        console.log(response?.data);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [published, setPublished] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+
+  const { articleId } = useParams<string>();
+  const navigate = useNavigate();
+
+  const fetchArticle = async () => {
+    const article: Article = await axios
+      .get(url + "get/" + articleId)
+      .then((response) => {
+        return response?.data?.article;
       })
-      .catch(function (error) {
+      .catch((error) => {
+        console.log(error);
+        return {};
+      });
+
+    if (article) {
+      setTitle(article?.title);
+      setDescription(article?.description);
+      setPublished(article?.published);
+      setContent(article?.content);
+    }
+  };
+
+  useEffect(() => {
+    if (articleId !== "") {
+      fetchArticle();
+    }
+  }, [articleId]);
+
+  const createArticle = async () => {
+    await axios
+      .post(url + "create", {
+        title: title,
+        description: description,
+        published: published,
+        content: editorRef.current?.getMarkdown(),
+        author: "MM",
+      })
+      .then(() => {
+        navigate("/article/" + articleId);
+      })
+      .catch((error) => {
         console.log(error);
       });
   };
 
-  const createArticle = () => {
-    axios
-      .post(url + "create")
-      .then(function (response) {
-        console.log(response?.data);
+  const updateArticle = async () => {
+    await axios
+      .put(url + "update", {
+        id: articleId,
+        title: title,
+        description: description,
+        published: published,
+        content: editorRef.current?.getMarkdown(),
       })
-      .catch(function (error) {
+      .then(() => {
+        navigate("/article/" + articleId);
+      })
+      .catch((error) => {
         console.log(error);
       });
   };
 
-  const updateArticle = () => {
-    axios
-      .put(url + "update")
-      .then(function (response) {
-        console.log(response?.data);
+  const deleteArticle = async () => {
+    await axios
+      .delete(url + "delete/" + articleId)
+      .then(() => {
+        navigate("/");
+        document.getElementById("delete_article_modal").showModal();
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
   };
 
-  const deleteArticle = () => {
-    axios
-      .delete(url + "delete")
-      .then(function (response) {
-        console.log(response?.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  const handleArticle = async () => {
+    if (articleId) {
+      updateArticle();
+    } else {
+      createArticle();
+    }
   };
 
   return (
     <div className="flex flex-row justify-center items-center">
-      <button onClick={() => getArticle()}>Get</button>
-      <button onClick={() => createArticle()}>Create</button>
-      <button onClick={() => updateArticle()}>Update</button>
-      <button onClick={() => deleteArticle()}>Delete</button>
+      <div className="flex flex-col w-[700px] mt-4">
+        <div className="flex justify-between">
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Title</legend>
+            <input
+              type="text"
+              className="input"
+              placeholder="Type here"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </fieldset>
+
+          <fieldset className="fieldset flex justify-end">
+            <legend className="fieldset-legend">Published</legend>
+            <input
+              type="checkbox"
+              checked={published}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setPublished(e);
+              }}
+              className="toggle border-red-600 bg-red-500 checked:border-green-500 checked:bg-green-400 checked:text-green-800"
+            />
+          </fieldset>
+        </div>
+
+        <fieldset className="fieldset mt-4">
+          <legend className="fieldset-legend">Description</legend>
+          <input
+            type="text"
+            className="input"
+            placeholder="Type here"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
+        </fieldset>
+
+        <fieldset className="fieldset mt-4">
+          <legend className="fieldset-legend">Content</legend>
+          <MDXEditor
+            ref={editorRef}
+            className="bg-white rounded-xl w-[700px]"
+            markdown={content}
+            onChange={(e) => {
+              setContent(e);
+            }}
+            plugins={[
+              headingsPlugin(),
+              listsPlugin(),
+              quotePlugin(),
+              thematicBreakPlugin(),
+              linkDialogPlugin(),
+              imagePlugin(),
+              tablePlugin(),
+              toolbarPlugin({
+                toolbarContents: () => (
+                  <>
+                    <UndoRedo />
+                    <BoldItalicUnderlineToggles />
+                    <BlockTypeSelect />
+                    <CreateLink />
+                    <InsertImage />
+                    <ListsToggle />
+                  </>
+                ),
+              }),
+            ]}
+          />
+        </fieldset>
+
+        <div className="mt-8 flex justify-between">
+          <button
+            className="btn btn-error"
+            onClick={() => {
+              document.getElementById("delete_article_modal").showModal();
+            }}
+            disabled={articleId ? false : true}
+          >
+            Delete
+          </button>
+
+          <button className="btn btn-primary" onClick={() => handleArticle()}>
+            {articleId ? "Edit" : "Create"}
+          </button>
+        </div>
+      </div>
+
+      <dialog id="delete_article_modal" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Delete article</h3>
+          <p className="py-4">Are you sure?</p>
+
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn btn-neutral">Close</button>
+            </form>
+            <button className="btn btn-error" onClick={() => deleteArticle()}>
+              Confirm
+            </button>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
-}
-
-export default Homepage;
+};
