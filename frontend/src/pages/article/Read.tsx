@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { type Article } from "@/types";
 import { useParams } from "react-router";
 import defaultArticleImage from "@assets/default_article.jpg";
+import { Link } from "react-router";
 
 export const ReadArticle = () => {
   const { articleId } = useParams<string>();
@@ -37,10 +38,16 @@ export const ReadArticle = () => {
           className="rounded-b-xl"
         />
 
-        <div className="flex flex-row my-4">
-          <p>{article.author}</p>
-          <p className="mx-2">@</p>
-          <p className="text-gray-400">{article.created_at}</p>
+        <div className="flex flex-row justify-between items-top mt-4 mb-4">
+          <div className="flex flex-row">
+            <p>{article.author}</p>
+            <p className="mx-2">@</p>
+            <p className="text-gray-400">{article.created_at}</p>
+          </div>
+
+          <Link to={"/article/edit/" + articleId} className="btn btn-warning">
+            Edit
+          </Link>
         </div>
 
         <h2 className="text-3xl">{article.title}</h2>
@@ -50,5 +57,3 @@ export const ReadArticle = () => {
     </div>
   );
 };
-
-//  <button className="btn btn-warning">Edit</button>

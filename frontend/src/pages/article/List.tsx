@@ -4,6 +4,8 @@ import { type Article } from "@/types";
 import { ArticleCard } from "@components/Article";
 
 export const ListArticles = () => {
+  const [articles, setArticles] = useState<Array<Article>>([]);
+
   const fetchArticles = async () => {
     const url: string = "/api/1.0/article/";
 
@@ -19,8 +21,6 @@ export const ListArticles = () => {
 
     setArticles(articles);
   };
-
-  const [articles, setArticles] = useState<Array<Article>>([]);
 
   useEffect(() => {
     fetchArticles();
