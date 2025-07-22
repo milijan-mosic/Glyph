@@ -11,7 +11,8 @@ export const ArticleCard = ({ article }: Article) => {
       <figure>
         <img src={defaultArticleImage} alt="Article default image" />
       </figure>
-      <div className="card-body">
+
+      <div className="card-body rounded-b-xl">
         <h2 className="card-title">{article.title}</h2>
         <div className="flex">
           <p>{article.author}</p>

@@ -32,14 +32,14 @@ export const ReadArticle = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="w-[700px]">
+      <div className="w-[700px] bg-gray-800 rounded-b-xl">
         <img
           src={defaultArticleImage}
           alt="Article default image"
           className="rounded-b-xl"
         />
 
-        <div className="flex flex-row justify-between items-top mt-4 mb-4">
+        <div className="flex flex-row justify-between items-top mt-4 mb-4 p-8">
           <div className="flex flex-row">
             <p>{article.author}</p>
             <p className="mx-2">@</p>
@@ -51,10 +51,12 @@ export const ReadArticle = () => {
           </Link>
         </div>
 
-        <h2 className="text-3xl">{article.title}</h2>
+        <div className="m-4">
+          <h2 className="text-3xl">{article.title}</h2>
 
-        <div className="mt-8">
-          <Markdown remarkPlugins={[remarkGfm]}>{article.content}</Markdown>
+          <div className="mt-8">
+            <Markdown remarkPlugins={[remarkGfm]}>{article.content}</Markdown>
+          </div>
         </div>
       </div>
     </div>

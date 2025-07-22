@@ -116,7 +116,7 @@ export const WriteOrEditArticle = () => {
 
   return (
     <div className="flex flex-row justify-center items-center">
-      <div className="flex flex-col w-[700px] mt-4">
+      <div className="flex flex-col w-[800px] p-8 rounded-b-xl bg-gray-800">
         <div className="flex justify-between">
           <fieldset className="fieldset">
             <legend className="fieldset-legend">Title</legend>
