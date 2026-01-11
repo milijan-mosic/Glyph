@@ -2,8 +2,8 @@ package articles
 
 import (
 	"context"
-	"heartbit/database_interfaces"
-	"heartbit/utils"
+	"glyph/database_interfaces"
+	"glyph/utils"
 	"log"
 	"net/http"
 	"time"

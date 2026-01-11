@@ -1,4 +1,4 @@
-module heartbit
+module glyph
 
 go 1.24.4
 

@@ -2,7 +2,7 @@ package articles
 
 import (
 	"context"
-	"heartbit/utils"
+	"glyph/utils"
 	"log"
 
 	"github.com/jackc/pgx/v5"

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"heartbit/articles"
+	"glyph/articles"
 	"log"
 
 	"github.com/gin-gonic/gin"
