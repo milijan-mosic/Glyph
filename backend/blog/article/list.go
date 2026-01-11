@@ -2,7 +2,7 @@ package articles
 
 import (
 	"context"
-	db "glyph/articles"
+	db "glyph/blog"
 	"glyph/database_interfaces"
 	"glyph/utils"
 	"log"
