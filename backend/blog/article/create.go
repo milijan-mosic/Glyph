@@ -2,8 +2,8 @@ package articles
 
 import (
 	"context"
-	db "glyph/blog"
 	"glyph/database_interfaces"
+	db "glyph/db"
 	"glyph/utils"
 	"log"
 	"net/http"
