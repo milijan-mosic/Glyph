@@ -6,11 +6,15 @@ import defaultArticleImage from "@assets/default_article.jpg";
 import { Link } from "react-router";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { CommentList } from "@/pages/comment/List";
+import { CreateCommentForm } from "@/pages/comment/Create";
 
 export const ReadArticle = () => {
   const url: string = "/api/1.0/article/";
   const { articleId } = useParams<string>();
   const [article, setArticle] = useState<Article>({});
+
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchArticle = async () => {
     const article: Article = await axios
@@ -59,6 +63,16 @@ export const ReadArticle = () => {
           </div>
         </div>
       </div>
+
+      <CommentList
+        key={refreshKey}
+        articleId={articleId!}
+      />
+
+      <CreateCommentForm
+        articleId={articleId!}
+        onSuccess={() => setRefreshKey((k) => k + 1)}
+      />
     </div>
   );
 };
