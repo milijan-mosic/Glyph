@@ -24,3 +24,31 @@ RETURNING *;
 -- name: DeleteArticle :exec
 DELETE FROM articles
 WHERE id = $1;
+
+----------------------------------------------------------------
+
+-- name: CreateComment :one
+INSERT INTO comments (article_id, author_name, content)
+VALUES ($1, $2, $3)
+RETURNING *;
+
+-- name: GetApprovedCommentsByPost :many
+SELECT *
+FROM comments
+WHERE article_id = $1 AND approved = TRUE
+ORDER BY created_at ASC;
+
+-- name: GetPendingComments :many
+SELECT *
+FROM comments
+WHERE approved = FALSE
+ORDER BY created_at ASC;
+
+-- name: ApproveComment :exec
+UPDATE comments
+SET approved = TRUE
+WHERE id = $1;
+
+-- name: DeleteComment :exec
+DELETE FROM comments
+WHERE id = $1;
