@@ -7,6 +7,7 @@ import { WriteOrEditArticle } from "@pages/article/WriteOrEdit.tsx";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { NavMenu } from "@components/menu/NavMenu";
 import flowers from "@assets/flowers.jpg";
+import { AdminCommentsPage } from "@pages/comment/admin/List.tsx";
 
 const root: HTMLElement | null = document.getElementById("root");
 
@@ -24,6 +25,7 @@ createRoot(root!).render(
           path="/article/edit/:articleId"
           element={<WriteOrEditArticle />}
         />
+        <Route path="/admin/comments" element={<AdminCommentsPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

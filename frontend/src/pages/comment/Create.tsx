@@ -24,7 +24,7 @@ export const CreateCommentForm = ({ articleId, onSuccess }: Props) => {
 
       setAuthor("");
       setContent("");
-      onSuccess(); // refresh list
+      onSuccess();
     } catch (err) {
       console.error("Failed to submit comment", err);
     } finally {
