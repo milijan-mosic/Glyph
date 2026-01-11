@@ -30,11 +30,11 @@ func main() {
 
 	comment := router.Group(urlPrefix + "/comment")
 	{
-		comment.POST("/comments", comments.CreateComment)
-		comment.GET("/posts/:postId/comments", comments.GetApprovedComments)
-		comment.GET("/admin/comments/pending", comments.GetPendingComments)
-		comment.PUT("/admin/comments/:id/approve", comments.ApproveComment)
-		comment.DELETE("/admin/comments/:id", comments.DeleteComment)
+		comment.POST("/create", comments.CreateComment)
+		comment.GET("/list/:articleId", comments.GetApprovedComments)
+		comment.GET("/pending", comments.GetPendingComments)
+		comment.PUT("/approve/:commentId", comments.ApproveComment)
+		comment.DELETE("/delete/:commentId", comments.DeleteComment)
 	}
 
 	log.Printf("Server starting on: http://localhost%s\n", address)
