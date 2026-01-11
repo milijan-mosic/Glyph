@@ -2,9 +2,9 @@ version: "2"
 sql:
   - engine: "postgresql"
     queries:
-      - "articles/sql/queries.sql"
+      - "db/sql/queries.sql"
     schema:
-      - "articles/sql/schemas.sql"
+      - "db/sql/schemas.sql"
     gen:
       go:
         package: "database_interfaces"
