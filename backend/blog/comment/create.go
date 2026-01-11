@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -35,8 +36,11 @@ func CreateComment(c *gin.Context) {
 
 	operations := database_interfaces.New(conn)
 
+	commentID := uuid.NewString()
+
 	comment, err := operations.CreateComment(c, database_interfaces.CreateCommentParams{
-		ArticleID:     req.ArticleId,
+		ID:         commentID,
+		ArticleID:  req.ArticleId,
 		AuthorName: req.AuthorName,
 		Content:    req.Content,
 	})

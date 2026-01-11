@@ -69,12 +69,13 @@ func (q *Queries) CreateArticle(ctx context.Context, arg CreateArticleParams) (A
 
 const createComment = `-- name: CreateComment :one
 
-INSERT INTO comments (article_id, author_name, content)
-VALUES ($1, $2, $3)
+INSERT INTO comments (id, article_id, author_name, content)
+VALUES ($1, $2, $3, $4)
 RETURNING id, article_id, author_name, content, approved, created_at, modified_at
 `
 
 type CreateCommentParams struct {
+	ID         string `json:"id"`
 	ArticleID  string `json:"article_id"`
 	AuthorName string `json:"author_name"`
 	Content    string `json:"content"`
@@ -82,7 +83,12 @@ type CreateCommentParams struct {
 
 // --------------------------------------------------------------
 func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (Comment, error) {
-	row := q.db.QueryRow(ctx, createComment, arg.ArticleID, arg.AuthorName, arg.Content)
+	row := q.db.QueryRow(ctx, createComment,
+		arg.ID,
+		arg.ArticleID,
+		arg.AuthorName,
+		arg.Content,
+	)
 	var i Comment
 	err := row.Scan(
 		&i.ID,

@@ -28,8 +28,8 @@ WHERE id = $1;
 ----------------------------------------------------------------
 
 -- name: CreateComment :one
-INSERT INTO comments (article_id, author_name, content)
-VALUES ($1, $2, $3)
+INSERT INTO comments (id, article_id, author_name, content)
+VALUES ($1, $2, $3, $4)
 RETURNING *;
 
 -- name: GetApprovedCommentsByPost :many
