@@ -13,7 +13,7 @@ import (
 )
 
 type createCommentRequest struct {
-	ArticleId     string  `json:"article_id" binding:"required"`
+	ArticleId  string `json:"article_id" binding:"required"`
 	AuthorName string `json:"author_name" binding:"required"`
 	Content    string `json:"content" binding:"required"`
 }

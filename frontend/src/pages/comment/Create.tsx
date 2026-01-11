@@ -34,9 +34,7 @@ export const CreateCommentForm = ({ articleId, onSuccess }: Props) => {
 
   return (
     <div className="mt-10 p-6 bg-gray-800 rounded-xl">
-      <h3 className="text-lg font-semibold mb-4">
-        Leave a comment
-      </h3>
+      <h3 className="text-lg font-semibold mb-4">Leave a comment</h3>
 
       <input
         type="text"

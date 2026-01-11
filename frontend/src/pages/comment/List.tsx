@@ -12,9 +12,7 @@ export const CommentList = ({ articleId }: Props) => {
 
   const fetchComments = async () => {
     try {
-      const res = await axios.get(
-        `/api/1.0/comment/list/${articleId}`
-      );
+      const res = await axios.get(`/api/1.0/comment/list/${articleId}`);
       setComments(res.data);
     } catch (err) {
       console.error("Failed to fetch comments", err);
@@ -40,18 +38,13 @@ export const CommentList = ({ articleId }: Props) => {
       <h3 className="text-xl font-semibold">Comments</h3>
 
       {comments.map((comment) => (
-        <div
-          key={comment.id}
-          className="p-4 rounded-lg bg-gray-700"
-        >
+        <div key={comment.id} className="p-4 rounded-lg bg-gray-700">
           <p className="text-sm text-gray-300">
             {comment.author_name} ·{" "}
             {new Date(comment.created_at).toLocaleString()}
           </p>
 
-          <p className="mt-2 whitespace-pre-wrap">
-            {comment.content}
-          </p>
+          <p className="mt-2 whitespace-pre-wrap">{comment.content}</p>
         </div>
       ))}
     </div>

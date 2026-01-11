@@ -17,7 +17,9 @@ export const ArticleCard = ({ article }: Article) => {
         <div className="flex">
           <p>{article.author}</p>
           <p className="-mx-0.5">@</p>
-          <p className="text-gray-400">{new Date(article.created_at).toLocaleString()}</p>
+          <p className="text-gray-400">
+            {new Date(article.created_at).toLocaleString()}
+          </p>
         </div>
         <p>{article.description}</p>
       </div>

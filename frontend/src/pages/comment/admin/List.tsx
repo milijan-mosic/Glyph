@@ -50,46 +50,37 @@ export const AdminCommentsPage = () => {
   return (
     <div className="flex justify-center">
       <div className="w-[800px] p-8 bg-gray-800 rounded-xl">
-        <h1 className="text-2xl font-bold mb-6">
-          Pending Comments
-        </h1>
+        <h1 className="text-2xl font-bold mb-6">Pending Comments</h1>
 
         <div className="space-y-4">
-        {comments.map((comment) => (
-            <div
-            key={comment.id}
-            className="p-4 rounded-lg bg-gray-700"
-            >
-            <p className="text-sm text-gray-300">
+          {comments.map((comment) => (
+            <div key={comment.id} className="p-4 rounded-lg bg-gray-700">
+              <p className="text-sm text-gray-300">
                 Article ID: {comment.post_id} ·{" "}
                 {new Date(comment.created_at).toLocaleString()}
-            </p>
+              </p>
 
-            <p className="font-semibold mt-1">
-                {comment.author_name}
-            </p>
+              <p className="font-semibold mt-1">{comment.author_name}</p>
 
-            <p className="mt-2 whitespace-pre-wrap">
-                {comment.content}
-            </p>
+              <p className="mt-2 whitespace-pre-wrap">{comment.content}</p>
 
-            <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex gap-2">
                 <button
-                className="btn btn-success btn-sm"
-                onClick={() => approveComment(comment.id)}
+                  className="btn btn-success btn-sm"
+                  onClick={() => approveComment(comment.id)}
                 >
-                Approve
+                  Approve
                 </button>
 
                 <button
-                className="btn btn-error btn-sm"
-                onClick={() => deleteComment(comment.id)}
+                  className="btn btn-error btn-sm"
+                  onClick={() => deleteComment(comment.id)}
                 >
-                Delete
+                  Delete
                 </button>
+              </div>
             </div>
-            </div>
-        ))}
+          ))}
         </div>
       </div>
     </div>

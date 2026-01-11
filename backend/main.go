@@ -16,7 +16,7 @@ var (
 
 func main() {
 	router := gin.Default()
-	
+
 	db.InitializeDatabase()
 
 	article := router.Group(urlPrefix + "/article")

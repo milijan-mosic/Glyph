@@ -64,10 +64,7 @@ export const ReadArticle = () => {
         </div>
       </div>
 
-      <CommentList
-        key={refreshKey}
-        articleId={articleId!}
-      />
+      <CommentList key={refreshKey} articleId={articleId!} />
 
       <CreateCommentForm
         articleId={articleId!}
