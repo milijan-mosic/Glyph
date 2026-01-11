@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
-    allowedHosts: ["app.heartbit.local"],
+    allowedHosts: ["app.glyph.local"],
   },
   resolve: {
     alias: {
