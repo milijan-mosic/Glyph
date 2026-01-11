@@ -1,4 +1,4 @@
-app.heartbit.local {
+app.glyph.local {
     tls internal
 
     handle /api/* {
@@ -10,7 +10,7 @@ app.heartbit.local {
     }
 }
 
-pgadmin.heartbit.local {
+pgadmin.glyph.local {
     tls internal
 
     handle {

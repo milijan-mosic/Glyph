@@ -9,7 +9,7 @@ services:
     volumes:
       - ./server/local.Caddyfile:/etc/caddy/Caddyfile
     networks:
-      - heartbit
+      - glyph
 
   database:
     image: postgres:17.5
@@ -26,7 +26,7 @@ services:
     depends_on:
       - server
     networks:
-      - heartbit
+      - glyph
 
   pgadmin:
     image: dpage/pgadmin4
@@ -41,7 +41,7 @@ services:
       - server
       - database
     networks:
-      - heartbit
+      - glyph
 
   api:
     image: api:latest
@@ -56,7 +56,7 @@ services:
       - server
       - database
     networks:
-      - heartbit
+      - glyph
 
   www:
     image: www:latest
@@ -72,11 +72,11 @@ services:
       - database
       - api
     networks:
-      - heartbit
+      - glyph
 
 volumes:
   database:
   pgadmin:
 
 networks:
-  heartbit:
+  glyph:
