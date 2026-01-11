@@ -28,6 +28,9 @@ func GetPendingComments(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	if len(comments) == 0 {
+		comments = make([]database_interfaces.Comment, 0)
+	}
 
 	c.JSON(http.StatusOK, comments)
 }
