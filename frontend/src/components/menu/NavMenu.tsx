@@ -5,7 +5,7 @@ export const NavMenu = () => {
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex-1">
         <Link to={"/"} className="btn btn-neutral text-xl">
-          Heartbit
+          Glyph
         </Link>
       </div>
       <div className="flex-none">
