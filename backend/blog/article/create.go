@@ -2,6 +2,7 @@ package articles
 
 import (
 	"context"
+	db "glyph/articles"
 	"glyph/database_interfaces"
 	"glyph/utils"
 	"log"
@@ -59,7 +60,7 @@ func CreateArticleRoute(c *gin.Context) {
 		log.Printf("Error while creating article: %s", err)
 
 		status := http.StatusInternalServerError
-		response := HelloResponse{
+		response := db.Response{
 			Message: "Article creation failed!",
 			Status:  status,
 		}

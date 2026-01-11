@@ -2,6 +2,7 @@ package articles
 
 import (
 	"context"
+	db "glyph/articles"
 	"glyph/database_interfaces"
 	"glyph/utils"
 	"log"
@@ -55,7 +56,7 @@ func UpdateArticleRoute(c *gin.Context) {
 		log.Printf("Error while updating article: %s", err)
 
 		status := http.StatusInternalServerError
-		response := HelloResponse{
+		response := db.Response{
 			Message: "Update article failed!",
 			Status:  status,
 		}
@@ -65,7 +66,7 @@ func UpdateArticleRoute(c *gin.Context) {
 	log.Print("Updated article...")
 
 	status := http.StatusOK
-	response := HelloResponse{
+	response := db.Response{
 		Message: "Article updated!",
 		Status:  status,
 	}

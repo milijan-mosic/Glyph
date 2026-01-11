@@ -1,6 +1,6 @@
-package articles
+package db
 
-type HelloResponse struct {
+type Response struct {
 	Message string `json:"message"`
 	Status  int    `json:"status"`
 }

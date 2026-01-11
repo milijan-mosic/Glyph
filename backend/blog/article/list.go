@@ -2,6 +2,7 @@ package articles
 
 import (
 	"context"
+	db "glyph/articles"
 	"glyph/database_interfaces"
 	"glyph/utils"
 	"log"
@@ -28,7 +29,7 @@ func ListArticleRoute(c *gin.Context) {
 		log.Printf("Error while listing articles: %s", err)
 
 		status := http.StatusInternalServerError
-		response := HelloResponse{
+		response := db.Response{
 			Message: "Articles listing failed!",
 			Status:  status,
 		}
