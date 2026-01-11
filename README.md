@@ -5,8 +5,7 @@ Made with:
 - Docker
 - Docker Compose
 - Linux
-- Traefik/Caddy
-- Jenkins
+- Caddy
 
 ---
 
@@ -14,7 +13,6 @@ Made with:
 - SQLc
 - Go
 - JWT
-- Web Sockets
 
 ---
 
