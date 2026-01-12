@@ -37,6 +37,7 @@ export const CreateCommentForm = ({ articleId, onSuccess }: Props) => {
       <h3 className="text-lg font-semibold mb-4">Leave a comment</h3>
 
       <input
+        name="author-name"
         type="text"
         placeholder="Your name"
         className="input w-full mb-3"
@@ -45,6 +46,7 @@ export const CreateCommentForm = ({ articleId, onSuccess }: Props) => {
       />
 
       <textarea
+        name="content"
         placeholder="Your comment"
         className="textarea w-full mb-4"
         rows={4}
@@ -53,6 +55,7 @@ export const CreateCommentForm = ({ articleId, onSuccess }: Props) => {
       />
 
       <button
+        id="submit-comment"
         className="btn btn-primary"
         onClick={submitComment}
         disabled={loading}
