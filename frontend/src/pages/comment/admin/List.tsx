@@ -48,25 +48,40 @@ export const AdminCommentsPage = () => {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center" data-testid="admin-comments-page">
       <div className="w-[800px] p-8 bg-gray-800 rounded-xl">
         <h1 className="text-2xl font-bold mb-6">Pending Comments</h1>
 
-        <div className="space-y-4">
+        <div className="space-y-4" data-testid="comments-section">
           {comments.map((comment) => (
-            <div key={comment.id} className="p-4 rounded-lg bg-gray-700">
-              <p className="text-sm text-gray-300">
+            <div
+              key={comment.id}
+              className="p-4 rounded-lg bg-gray-700"
+              data-testid="admin-comment" // generalized for all comments
+            >
+              <p
+                className="text-sm text-gray-300"
+                data-testid="comment-article-id"
+              >
                 Article ID: {comment.post_id} ·{" "}
                 {new Date(comment.created_at).toLocaleString()}
               </p>
 
-              <p className="font-semibold mt-1">{comment.author_name}</p>
+              <p className="font-semibold mt-1" data-testid="comment-author">
+                {comment.author_name}
+              </p>
 
-              <p className="mt-2 whitespace-pre-wrap">{comment.content}</p>
+              <p
+                className="mt-2 whitespace-pre-wrap"
+                data-testid="comment-content"
+              >
+                {comment.content}
+              </p>
 
               <div className="mt-4 flex gap-2">
                 <button
-                  className="btn btn-success btn-sm"
+                  className="btn btn-success btn-sm approve-btn"
+                  data-testid="approve-btn"
                   onClick={() => approveComment(comment.id)}
                 >
                   Approve
@@ -74,6 +89,7 @@ export const AdminCommentsPage = () => {
 
                 <button
                   className="btn btn-error btn-sm"
+                  data-testid="delete-btn"
                   onClick={() => deleteComment(comment.id)}
                 >
                   Delete
