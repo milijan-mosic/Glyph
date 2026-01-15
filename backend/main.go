@@ -1,42 +1,71 @@
 package main
 
 import (
-	articles "glyph/blog/article"
-	comments "glyph/blog/comment"
-	"glyph/db"
-	"log"
+	"fmt"
+	"glyph/database"
+	"glyph/handlers/blog/article"
+	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/jwtauth/v5"
+	"gorm.io/gorm"
 )
 
-var (
-	address   = ":5000"
-	urlPrefix = "/api/1.0"
-)
+var tokenAuth *jwtauth.JWTAuth
+
+func init() {
+	tokenAuth = jwtauth.New("HS256", []byte("secret"), nil) // replace with secret key
+
+	// For debugging/example purposes, we generate and print
+	// a sample jwt token with claims `user_id:123` here:
+	_, tokenString, _ := tokenAuth.Encode(map[string]interface{}{"user_id": 123})
+	fmt.Printf("DEBUG: a sample jwt is %s\n\n", tokenString)
+}
 
 func main() {
-	router := gin.Default()
+	dbConn := database.InitializeDatabase()
 
-	db.InitializeDatabase()
-
-	article := router.Group(urlPrefix + "/article")
-	{
-		article.GET("/list", articles.ListArticleRoute)
-		article.GET("/get/:articleId", articles.GetArticleRoute)
-		article.POST("/create", articles.CreateArticleRoute)
-		article.PUT("/update", articles.UpdateArticleRoute)
-		article.DELETE("/delete/:articleId", articles.DeleteArticleRoute)
-	}
-
-	comment := router.Group(urlPrefix + "/comment")
-	{
-		comment.POST("/create", comments.CreateComment)
-		comment.GET("/list/:articleId", comments.GetApprovedComments)
-		comment.GET("/pending", comments.GetPendingComments)
-		comment.PUT("/approve/:commentId", comments.ApproveComment)
-		comment.DELETE("/delete/:commentId", comments.DeleteComment)
-	}
-
-	log.Printf("Server starting on: http://localhost%s\n", address)
-	router.Run(address)
+	port := ":5000"
+	fmt.Printf("Starting server on %v\n", port)
+	http.ListenAndServe(port, newRouter(dbConn))
 }
+
+func newRouter(dbConn *gorm.DB) http.Handler {
+	router := chi.NewRouter()
+	urlPrefix := "/api/1.0"
+
+	articlePrefix := urlPrefix + "/article"
+	router.Post(articlePrefix+"/create", article.List(dbConn))
+
+	return router
+}
+
+// func router() http.Handler {
+// 	r := chi.NewRouter()
+
+// 	// Protected routes
+// 	r.Group(func(r chi.Router) {
+// 		// Seek, verify and validate JWT tokens
+// 		r.Use(jwtauth.Verifier(tokenAuth))
+
+// 		// Handle valid / invalid tokens. In this example, we use
+// 		// the provided authenticator middleware, but you can write your
+// 		// own very easily, look at the Authenticator method in jwtauth.go
+// 		// and tweak it, its not scary.
+// 		r.Use(jwtauth.Authenticator)
+
+// 		r.Get("/admin", func(w http.ResponseWriter, r *http.Request) {
+// 			_, claims, _ := jwtauth.FromContext(r.Context())
+// 			w.Write([]byte(fmt.Sprintf("protected area. hi %v", claims["user_id"])))
+// 		})
+// 	})
+
+// 	// Public routes
+// 	r.Group(func(r chi.Router) {
+// 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+// 			w.Write([]byte("welcome anonymous"))
+// 		})
+// 	})
+
+// 	return r
+// }
