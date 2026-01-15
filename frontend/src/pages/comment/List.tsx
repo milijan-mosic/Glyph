@@ -30,7 +30,7 @@ export const CommentList = ({ articleId }: Props) => {
   }
 
   if (comments.length === 0) {
-    return <p className="text-gray-400 mt-6">No comments yet.</p>;
+    return <p className="bg-gray-800 rounded-xl p-4 mt-6">No comments yet.</p>;
   }
 
   return (
