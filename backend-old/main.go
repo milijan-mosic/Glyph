@@ -21,8 +21,6 @@ func main() {
 
 	article := router.Group(urlPrefix + "/article")
 	{
-		article.GET("/list", articles.ListArticleRoute)
-		article.GET("/get/:articleId", articles.GetArticleRoute)
 		article.PUT("/update", articles.UpdateArticleRoute)
 		article.DELETE("/delete/:articleId", articles.DeleteArticleRoute)
 	}

@@ -11,3 +11,10 @@ func JSON(w http.ResponseWriter, status int, key string, payload any) {
 		key: payload,
 	})
 }
+
+func Error(w http.ResponseWriter, status int, message string) {
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(map[string]any{
+		"error": message,
+	})
+}

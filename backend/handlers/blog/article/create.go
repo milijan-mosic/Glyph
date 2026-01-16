@@ -1,34 +1,61 @@
 package article
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"glyph/database"
 	"glyph/models"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
-func List(dbConn *gorm.DB) http.HandlerFunc {
+type CreateArticleRequest struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Published   bool   `json:"published"`
+	Content     string `json:"content"`
+}
+
+func Create(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var articles []models.Article
+		var req CreateArticleRequest
 
-		err := dbConn.
-			Order("created_at DESC").
-			Find(&articles).
-			Error
-		if err != nil {
-			log.Printf("Error while listing articles: %v", err)
-
-			database.JSON(w, http.StatusInternalServerError, "message", err)
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			database.Error(w, http.StatusBadRequest, "Invalid JSON body")
 			return
 		}
 
-		if len(articles) == 0 {
-			articles = make([]models.Article, 0)
+		if req.Title == "" || req.Content == "" {
+			database.Error(w, http.StatusBadRequest, "Arguments `title` and `content` are required!")
+			return
 		}
 
-		database.JSON(w, http.StatusOK, "articles", articles)
+		article := models.Article{
+			ID:          uuid.NewString(),
+			Title:       req.Title,
+			Description: req.Description,
+			Content:     req.Content,
+			Published:   req.Published,
+			Author:      "Milijan Mosic",
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+		}
+
+		if err := db.Create(&article).Error; err != nil {
+			log.Printf("Error while creating article: %v", err)
+			database.Error(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		database.JSON(
+			w,
+			http.StatusCreated,
+			"articleId",
+			article.ID,
+		)
 	}
 }

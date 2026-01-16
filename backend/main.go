@@ -35,7 +35,9 @@ func newRouter(dbConn *gorm.DB) http.Handler {
 	urlPrefix := "/api/1.0"
 
 	articlePrefix := urlPrefix + "/article"
-	router.Post(articlePrefix+"/create", article.List(dbConn))
+	router.Get(articlePrefix+"/list", article.List(dbConn))
+	router.Get(articlePrefix+"/get/{articleId}", article.Get(dbConn))
+	router.Post(articlePrefix+"/create", article.Create(dbConn))
 
 	return router
 }
