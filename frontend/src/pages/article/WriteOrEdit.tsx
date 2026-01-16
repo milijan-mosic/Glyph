@@ -70,7 +70,7 @@ export const WriteOrEditArticle = () => {
         author: "MM",
       })
       .then((response) => {
-        navigate("/article/" + response?.data?.ArticleId);
+        navigate("/article/" + response?.data?.articleId);
       })
       .catch((error) => {
         console.error("Axios error:", error.message);

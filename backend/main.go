@@ -38,6 +38,8 @@ func newRouter(dbConn *gorm.DB) http.Handler {
 	router.Get(articlePrefix+"/list", article.List(dbConn))
 	router.Get(articlePrefix+"/get/{articleId}", article.Get(dbConn))
 	router.Post(articlePrefix+"/create", article.Create(dbConn))
+	router.Put(articlePrefix+"/update", article.Update(dbConn))
+	router.Delete(articlePrefix+"/delete/{articleId}", article.Delete(dbConn))
 
 	return router
 }
