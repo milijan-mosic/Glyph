@@ -1,7 +1,6 @@
 package main
 
 import (
-	articles "glyph/blog/article"
 	comments "glyph/blog/comment"
 	"glyph/db"
 	"log"
@@ -18,12 +17,6 @@ func main() {
 	router := gin.Default()
 
 	db.InitializeDatabase()
-
-	article := router.Group(urlPrefix + "/article")
-	{
-		article.PUT("/update", articles.UpdateArticleRoute)
-		article.DELETE("/delete/:articleId", articles.DeleteArticleRoute)
-	}
 
 	comment := router.Group(urlPrefix + "/comment")
 	{
