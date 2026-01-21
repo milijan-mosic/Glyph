@@ -48,9 +48,11 @@ func Update(db *gorm.DB) http.HandlerFunc {
 			Where("id = ?", req.ArticleID).
 			Updates(updates)
 
-		if result.Error != nil {
-			log.Printf("Error while updating article: %v", result.Error)
-			database.Error(w, http.StatusInternalServerError, result.Error.Error())
+		err := result.Error
+
+		if err != nil {
+			log.Printf("Error while updating article: %v", err)
+			database.Error(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 

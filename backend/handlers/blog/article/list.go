@@ -10,11 +10,16 @@ import (
 	"gorm.io/gorm"
 )
 
-func List(dbConn *gorm.DB) http.HandlerFunc {
+func List(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var articles []models.Article
 
-		err := dbConn.Order("created_at DESC").Find(&articles).Error
+		result := db.
+			Order("created_at DESC").
+			Find(&articles)
+
+		err := result.Error
+
 		if err != nil {
 			log.Printf("Error while listing articles: %v", err)
 

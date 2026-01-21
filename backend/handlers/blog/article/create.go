@@ -45,7 +45,11 @@ func Create(db *gorm.DB) http.HandlerFunc {
 			UpdatedAt:   time.Now(),
 		}
 
-		if err := db.Create(&article).Error; err != nil {
+		result := db.Create(&article)
+
+		err := result.Error
+
+		if err != nil {
 			log.Printf("Error while creating article: %v", err)
 			database.Error(w, http.StatusInternalServerError, err.Error())
 			return

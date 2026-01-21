@@ -23,9 +23,11 @@ func Delete(db *gorm.DB) http.HandlerFunc {
 			Where("id = ?", articleID).
 			Delete(&models.Article{})
 
-		if result.Error != nil {
-			log.Printf("Error while deleting article: %v", result.Error)
-			database.Error(w, http.StatusInternalServerError, result.Error.Error())
+		err := result.Error
+
+		if err != nil {
+			log.Printf("Error while deleting article: %v", err)
+			database.Error(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 

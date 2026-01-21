@@ -11,12 +11,17 @@ import (
 	"gorm.io/gorm"
 )
 
-func Get(dbConn *gorm.DB) http.HandlerFunc {
+func Get(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		articleId := chi.URLParam(r, "articleId")
 		article := models.Article{}
 
-		err := dbConn.Where("id = ?", articleId).Find(&article).Error
+		result := db.
+			Where("id = ?", articleId).
+			Find(&article)
+
+		err := result.Error
+
 		if err != nil {
 			log.Printf("Error while listing article: %v", err)
 
