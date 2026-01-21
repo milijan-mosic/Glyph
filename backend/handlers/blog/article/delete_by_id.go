@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Delete(db *gorm.DB) http.HandlerFunc {
+func DeleteByID(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		articleID := chi.URLParam(r, "articleId")
 		if articleID == "" {

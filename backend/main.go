@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"glyph/database"
 	"glyph/handlers/blog/article"
+	"glyph/handlers/blog/comment"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -34,12 +35,21 @@ func newRouter(dbConn *gorm.DB) http.Handler {
 	router := chi.NewRouter()
 	urlPrefix := "/api/1.0"
 
-	articlePrefix := urlPrefix + "/article"
-	router.Get(articlePrefix+"/list", article.List(dbConn))
-	router.Get(articlePrefix+"/get/{articleId}", article.Get(dbConn))
-	router.Post(articlePrefix+"/create", article.Create(dbConn))
-	router.Put(articlePrefix+"/update", article.Update(dbConn))
-	router.Delete(articlePrefix+"/delete/{articleId}", article.Delete(dbConn))
+	router.Route(urlPrefix+"/article", func(r chi.Router) {
+		router.Get("/list", article.List(dbConn))
+		router.Get("/get/{articleId}", article.GetByID(dbConn))
+		router.Post("/create", article.Create(dbConn))
+		router.Put("/update", article.Update(dbConn))
+		router.Delete("/delete/{articleId}", article.DeleteByID(dbConn))
+	})
+
+	router.Route(urlPrefix+"/comment", func(r chi.Router) {
+		r.Post("/create", comment.Create(dbConn))
+		r.Get("/list/{articleId}", comment.ListByArticleID(dbConn))
+		r.Get("/pending", comment.ListPending(dbConn))
+		r.Put("/approve/{commentId}", comment.Approve((dbConn)))
+		r.Delete("/delete/{commentId}", comment.DeleteByID(dbConn))
+	})
 
 	return router
 }

@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Get(db *gorm.DB) http.HandlerFunc {
+func GetByID(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		articleId := chi.URLParam(r, "articleId")
 		article := models.Article{}
