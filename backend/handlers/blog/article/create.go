@@ -55,11 +55,6 @@ func Create(db *gorm.DB) http.HandlerFunc {
 			return
 		}
 
-		database.JSON(
-			w,
-			http.StatusCreated,
-			"articleId",
-			article.ID,
-		)
+		database.JSON(w, http.StatusCreated, "articleId", article.ID)
 	}
 }

@@ -12,11 +12,8 @@ import (
 )
 
 type UpdateCommentRequest struct {
-	CommentID   string `json:"comment_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Published   bool   `json:"published"`
-	Content     string `json:"content"`
+	CommentID string `json:"comment_id"`
+	Approved  bool   `json:"approved"`
 }
 
 func Approve(db *gorm.DB) http.HandlerFunc {
@@ -28,25 +25,19 @@ func Approve(db *gorm.DB) http.HandlerFunc {
 			return
 		}
 
-		if req.CommentID == "" ||
-			req.Title == "" ||
-			req.Description == "" ||
-			req.Content == "" {
-			database.Error(w, http.StatusBadRequest, "all fields are required")
+		if req.CommentID != "" {
+			database.Error(w, http.StatusBadRequest, "All fields are required")
 			return
 		}
 
-		updates := map[string]any{
-			"title":       req.Title,
-			"description": req.Description,
-			"content":     req.Content,
-			"published":   req.Published,
+		updatedComment := map[string]any{
+			"approved": req.Approved,
 		}
 
 		result := db.
 			Model(&models.Comment{}).
 			Where("id = ?", req.CommentID).
-			Updates(updates)
+			Updates(updatedComment)
 
 		err := result.Error
 
@@ -61,6 +52,6 @@ func Approve(db *gorm.DB) http.HandlerFunc {
 			return
 		}
 
-		database.JSON(w, http.StatusOK, "message", "Comment updated!")
+		database.JSON(w, http.StatusNoContent, "", "")
 	}
 }

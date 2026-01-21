@@ -14,10 +14,9 @@ import (
 )
 
 type CreateCommentRequest struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Published   bool   `json:"published"`
-	Content     string `json:"content"`
+	ArticleID  string `json:"article_id" binding:"required"`
+	AuthorName string `json:"author_name" binding:"required"`
+	Content    string `json:"content" binding:"required"`
 }
 
 func Create(db *gorm.DB) http.HandlerFunc {
@@ -29,20 +28,19 @@ func Create(db *gorm.DB) http.HandlerFunc {
 			return
 		}
 
-		if req.Title == "" || req.Content == "" {
-			database.Error(w, http.StatusBadRequest, "Arguments `title` and `content` are required!")
+		if req.ArticleID == "" || req.Content == "" || req.AuthorName == "" {
+			database.Error(w, http.StatusBadRequest, "Arguments `article_id`, `content` and `author_name` are required!")
 			return
 		}
 
 		comment := models.Comment{
-			ID:          uuid.NewString(),
-			Title:       req.Title,
-			Description: req.Description,
-			Content:     req.Content,
-			Published:   req.Published,
-			Author:      "Milijan Mosic",
-			CreatedAt:   time.Now(),
-			UpdatedAt:   time.Now(),
+			ID:         uuid.NewString(),
+			ArticleID:  req.ArticleID,
+			AuthorName: req.AuthorName,
+			Content:    req.Content,
+			Approved:   false,
+			CreatedAt:  time.Now(),
+			UpdatedAt:  time.Now(),
 		}
 
 		result := db.Create(&comment)
@@ -55,11 +53,6 @@ func Create(db *gorm.DB) http.HandlerFunc {
 			return
 		}
 
-		database.JSON(
-			w,
-			http.StatusCreated,
-			"commentId",
-			comment.ID,
-		)
+		database.JSON(w, http.StatusCreated, "commentId", comment.ID)
 	}
 }

@@ -7,11 +7,18 @@ import (
 	"glyph/database"
 	"glyph/models"
 
+	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 )
 
 func ListByArticleID(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		commentID := chi.URLParam(r, "commentId")
+		if commentID == "" {
+			database.Error(w, http.StatusBadRequest, "Comment ID is required")
+			return
+		}
+
 		var comments []models.Comment
 
 		result := db.

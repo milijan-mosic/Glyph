@@ -15,6 +15,7 @@ func ListPending(db *gorm.DB) http.HandlerFunc {
 		var comments []models.Comment
 
 		result := db.
+			Where("approved = ?", false).
 			Order("created_at DESC").
 			Find(&comments)
 

@@ -32,7 +32,7 @@ func Update(db *gorm.DB) http.HandlerFunc {
 			req.Title == "" ||
 			req.Description == "" ||
 			req.Content == "" {
-			database.Error(w, http.StatusBadRequest, "all fields are required")
+			database.Error(w, http.StatusBadRequest, "All fields are required")
 			return
 		}
 
