@@ -1,42 +1,31 @@
 package comment
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
 	"glyph/database"
 	"glyph/models"
 
+	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 )
 
-type UpdateCommentRequest struct {
-	CommentID string `json:"comment_id"`
-	Approved  bool   `json:"approved"`
-}
-
 func Approve(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req UpdateCommentRequest
-
-		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-			database.Error(w, http.StatusBadRequest, "Invalid JSON body")
-			return
-		}
-
-		if req.CommentID != "" {
-			database.Error(w, http.StatusBadRequest, "All fields are required")
+		commentID := chi.URLParam(r, "commentId")
+		if commentID == "" {
+			database.Error(w, http.StatusBadRequest, "Comment ID is required")
 			return
 		}
 
 		updatedComment := map[string]any{
-			"approved": req.Approved,
+			"approved": true,
 		}
 
 		result := db.
 			Model(&models.Comment{}).
-			Where("id = ?", req.CommentID).
+			Where("id = ?", commentID).
 			Updates(updatedComment)
 
 		err := result.Error

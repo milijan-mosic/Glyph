@@ -13,8 +13,8 @@ import (
 
 func ListByArticleID(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		commentID := chi.URLParam(r, "commentId")
-		if commentID == "" {
+		articleID := chi.URLParam(r, "articleId")
+		if articleID == "" {
 			database.Error(w, http.StatusBadRequest, "Comment ID is required")
 			return
 		}
@@ -23,6 +23,7 @@ func ListByArticleID(db *gorm.DB) http.HandlerFunc {
 
 		result := db.
 			Order("created_at DESC").
+			Where("article_id = ?", articleID).
 			Find(&comments)
 
 		err := result.Error

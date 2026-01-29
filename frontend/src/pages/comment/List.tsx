@@ -13,7 +13,7 @@ export const CommentList = ({ articleId }: Props) => {
   const fetchComments = async () => {
     try {
       const res = await axios.get(`/api/1.0/comment/list/${articleId}`);
-      setComments(res.data);
+      setComments(res?.data?.comments);
     } catch (err) {
       console.error("Failed to fetch comments", err);
     } finally {

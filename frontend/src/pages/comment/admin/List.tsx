@@ -9,7 +9,7 @@ export const AdminCommentsPage = () => {
   const fetchPendingComments = async () => {
     try {
       const res = await axios.get("/api/1.0/comment/pending");
-      setComments(res.data);
+      setComments(res?.data?.comments);
     } catch (err) {
       console.error("Failed to fetch pending comments", err);
     } finally {
