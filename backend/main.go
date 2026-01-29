@@ -6,8 +6,11 @@ import (
 	"glyph/handlers/blog/article"
 	"glyph/handlers/blog/comment"
 	"net/http"
+	"time"
 
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/httprate"
 	"github.com/go-chi/jwtauth/v5"
 	"gorm.io/gorm"
 )
@@ -33,6 +36,19 @@ func main() {
 
 func newRouter(dbConn *gorm.DB) http.Handler {
 	router := chi.NewRouter()
+
+	router.Use(middleware.RealIP)
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Logger)
+	router.Use(middleware.AllowContentEncoding("gzip"))
+	router.Use(middleware.AllowContentType("application/json"))
+	router.Use(middleware.Compress(5, "application/json"))
+	router.Use(middleware.CleanPath)
+	router.Use(httprate.LimitByIP(1000, 1*time.Minute))
+	router.Use(middleware.Timeout(5 * time.Second))
+	router.Use(middleware.Heartbeat("/health"))
+	router.Use(middleware.Recoverer)
+
 	urlPrefix := "/api/1.0"
 
 	router.Route(urlPrefix+"/article", func(r chi.Router) {
