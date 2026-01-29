@@ -18,6 +18,7 @@ type CreateArticleRequest struct {
 	Description string `json:"description"`
 	Published   bool   `json:"published"`
 	Content     string `json:"content"`
+	Author      string `json:"author"`
 }
 
 func Create(db *gorm.DB) http.HandlerFunc {
@@ -40,7 +41,7 @@ func Create(db *gorm.DB) http.HandlerFunc {
 			Description: req.Description,
 			Content:     req.Content,
 			Published:   req.Published,
-			Author:      "Milijan Mosic",
+			Author:      req.Author,
 			CreatedAt:   time.Now(),
 			UpdatedAt:   time.Now(),
 		}

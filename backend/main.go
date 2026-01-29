@@ -43,7 +43,6 @@ func newRouter(dbConn *gorm.DB) http.Handler {
 	router.Use(middleware.AllowContentEncoding("gzip"))
 	router.Use(middleware.AllowContentType("application/json"))
 	router.Use(middleware.Compress(5, "application/json"))
-	router.Use(middleware.CleanPath)
 	router.Use(httprate.LimitByIP(1000, 1*time.Minute))
 	router.Use(middleware.Timeout(5 * time.Second))
 	router.Use(middleware.Heartbeat("/health"))
@@ -52,11 +51,11 @@ func newRouter(dbConn *gorm.DB) http.Handler {
 	urlPrefix := "/api/1.0"
 
 	router.Route(urlPrefix+"/article", func(r chi.Router) {
-		router.Get("/list", article.List(dbConn))
-		router.Get("/get/{articleId}", article.GetByID(dbConn))
-		router.Post("/create", article.Create(dbConn))
-		router.Put("/update", article.Update(dbConn))
-		router.Delete("/delete/{articleId}", article.DeleteByID(dbConn))
+		r.Get("/list", article.List(dbConn))
+		r.Get("/get/{articleId}", article.GetByID(dbConn))
+		r.Post("/create", article.Create(dbConn))
+		r.Put("/update", article.Update(dbConn))
+		r.Delete("/delete/{articleId}", article.DeleteByID(dbConn))
 	})
 
 	router.Route(urlPrefix+"/comment", func(r chi.Router) {
